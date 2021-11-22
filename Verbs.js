@@ -12,7 +12,6 @@ module.exports = class Verbs {
 
     all_verbs() {
         let all_verbs = {}
-        console.log(this.verb_prefix)
         this.verb_prefix.map(pref => {
             for(let x=0 ; x<this.present_roots.length ; x++ ){
                 let present_root = this.present_roots[x]
@@ -29,8 +28,9 @@ module.exports = class Verbs {
                     all_verbs[pref+past_root+post] = past_root
                 })
             }
-            return all_verbs
-        })    
+        })   
+        // return all_verbs 
+        console.log(Object.keys(all_verbs).length)
     }
 
     mokassar_dict(){

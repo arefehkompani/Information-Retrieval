@@ -11,9 +11,9 @@ class Main {
 
     xa(){
         // console.log(Marks.punctuation)
-        return this.Verbs.mokassar_dict()
+        return this.Verbs.all_verbs()
     }
 }
 
 const main = new Main()
-main.xa();
+console.log(main.xa())
