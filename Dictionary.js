@@ -38,11 +38,15 @@ module.exports = class Read {
         let tokenizer = new Tokenizer
         let normalizer = new Normalizer
         let term_position_in_doc = 1
+        let positional_index = {}
 
         this.contents.map((content,id) => {
             let doc_tokens = tokenizer.set_tokenizer(content)
-            doc_tokens = normalizer.set_normalizer(doc_tokens)
-            doc_tokens.map((token) => {
+            let doc_normal = normalizer.set_normalizer(doc_tokens)
+            doc_normal.map((token) => {
+                if (!positional_index.isOwnProperty(token)) {
+                    positional_index[token] = {}
+                }
 
             })
         })
