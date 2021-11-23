@@ -1,9 +1,11 @@
 const Marks = require('./Marks')
+const Verbs = require('./Verbs')
 
 module.exports = class Normalizer {
 
     constructor(){
         this.Marks = new Marks
+        this.Verbs = new Verbs
     }
 
     remove_punctuation_marks(word_list){
@@ -20,15 +22,26 @@ module.exports = class Normalizer {
     }
 
     remove_mokassar(word_list){
-
+        word_list.map((rows,i) => {
+            if (this.Verbs.mokassar_dict().hasOwnProperty(rows)) {
+                word_list[i] = this.Verbs.mokassar_dict()[rows]
+            }
+        })
+        console.log(word_list)
     }
 
     remove_arabic_notation(word_list){
 
     }
 
-    create_translation_table(src_list, dst_list){
-        
+    create_translation_table(src_list, dst_list, word_list){
+        word_list.map((rows,j) => {
+           for (let i = 0; i < src_list.length; i++) {
+               rows = rows.replaceAll(src_list.substr(i,1) ,dst_list.substr(i,1))
+               word_list[j] = rows
+           }
+       })
+       return word_list
     }
 
     char_digit_Unification(word_list){
@@ -41,11 +54,8 @@ module.exports = class Normalizer {
         let translation_dst = ' ىكي“”'
         translation_src += 'ئ0123456789أإآ%'
         translation_dst += 'ی۰۱۲۳۴۵۶۷۸۹ااا٪'
-        let translations_table = this.create_translation_table(translation_src, translation_dst)
-        for(let i=0 ; i<word_list.length ; i++){
-            //word_list[i] = word_list[i].translate(translations_table)
-        }
-
+        
+        return this.create_translation_table(translation_src, translation_dst, word_list)
     }
 
     verb_Steaming(word_list){
