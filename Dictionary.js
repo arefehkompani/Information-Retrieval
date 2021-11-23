@@ -1,4 +1,6 @@
 const reader = require('xlsx')
+const Tokenizer = require('./Tokenizer')
+const Normalizer = require('./Normalizer')
 
 
 module.exports = class Read {
@@ -32,15 +34,21 @@ module.exports = class Read {
         })
     }
 
-    create_dictionary(cont, docid) {
-        
+    create_dictionary() {
+        let tokenizer = new Tokenizer
+        let normalizer = new Normalizer
+        let term_position_in_doc = 1
+
+        this.contents.map((content,id) => {
+            let doc_tokens = tokenizer.set_tokenizer(content)
+            doc_tokens = normalizer.set_normalizer(doc_tokens)
+            doc_tokens.map((token) => {
+
+            })
+        })
     }
 
-    delete_stopwords() {
-
-    }
-
-    set_doctionary() {
-        //this.create_dictionary()
+    set_dictionary() {
+        this.create_dictionary()
     }
 }

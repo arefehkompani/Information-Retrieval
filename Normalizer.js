@@ -92,6 +92,15 @@ module.exports = class Normalizer {
         })
         return word_list
     }
+    
+    remove_stopwords(word_list){
+        for(let i=0 ; i<word_list.length ; i++){
+            this.Marks.stopwords.map(mark => {
+                word_list[i] = word_list[i].replaceAll(mark,"")
+            })
+        }
+        return word_list
+    }
 
     morakab_Unification(word_list){
         this.Regex.raw_half_space.map((pattern)=>{
@@ -103,7 +112,12 @@ module.exports = class Normalizer {
         return word_list
     }
 
+    remove_nones(word_list){
+        return word_list.filter((a) => a)
+    }
+
     set_normalizer(word_list){
+        word_list = this.remove_stopwords(word_list)
         word_list = this.remove_punctuation_marks(word_list)
         word_list = this.edit_long_letters(word_list)
         word_list = this.remove_mokassar(word_list)
@@ -112,6 +126,7 @@ module.exports = class Normalizer {
         word_list = this.verb_Steaming(word_list)
         word_list = this.remove_postfix(word_list)
         word_list = this.morakab_Unification(word_list)
+        word_list = this.remove_nones(word_list)
         return word_list
     }
 }
