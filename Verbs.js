@@ -29,8 +29,8 @@ module.exports = class Verbs {
                 })
             }
         })   
-        // return all_verbs 
-        console.log(Object.keys(all_verbs).length)
+        //console.log(Object.keys(all_verbs).length)
+        return all_verbs 
     }
 
     mokassar_dict(){

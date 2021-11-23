@@ -17,8 +17,8 @@ class Main {
 
     xa(){
         // console.log(Marks.punctuation)
-        let tt = this.Tokenizer.set_tokenizer("ابیآمن یب124 قواعد")
-        return this.Normalizer.remove_mokassar(tt)
+        let tt = this.Tokenizer.set_tokenizer("بِز یُا")
+        return this.Normalizer.remove_arabic_notation(tt)
     }
 }
 

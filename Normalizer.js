@@ -1,11 +1,13 @@
 const Marks = require('./Marks')
 const Verbs = require('./Verbs')
+const Regex = require('./Regex')
 
 module.exports = class Normalizer {
 
     constructor(){
         this.Marks = new Marks
         this.Verbs = new Verbs
+        this.Regex = new Regex
     }
 
     remove_punctuation_marks(word_list){
@@ -18,7 +20,13 @@ module.exports = class Normalizer {
     }
 
     edit_long_letters(word_list){
-
+        this.Regex.raw_long_letters.map((pattern)=>{
+            word_list.map((rows,i)=>{
+                let reg = new RegExp(pattern[0], 'g');
+                word_list[i] = rows.replace(reg, pattern[1]);
+            })
+        })
+        return word_list
     }
 
     remove_mokassar(word_list){
@@ -27,11 +35,17 @@ module.exports = class Normalizer {
                 word_list[i] = this.Verbs.mokassar_dict()[rows]
             }
         })
-        console.log(word_list)
+        return word_list
     }
 
     remove_arabic_notation(word_list){
-
+        this.Regex.raw_arabic_notation.map((pattern)=>{
+            word_list.map((rows,i)=>{
+                let reg = new RegExp(pattern[0], 'g');
+                word_list[i] = rows.replace(reg, pattern[1]);
+            })
+        })
+        return word_list
     }
 
     create_translation_table(src_list, dst_list, word_list){
@@ -59,7 +73,12 @@ module.exports = class Normalizer {
     }
 
     verb_Steaming(word_list){
-
+        word_list.map((rows,i) => {
+            if (this.Verbs.all_verbs().hasOwnProperty(rows)) {
+                word_list[i] = this.Verbs.all_verbs()[rows]
+            }
+        })
+        return word_list
     }
 
     remove_prefix(word_list){
