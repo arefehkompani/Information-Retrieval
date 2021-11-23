@@ -82,15 +82,35 @@ module.exports = class Normalizer {
     }
 
     remove_prefix(word_list){
-
+        let starts = ['ب‌' , 'نا', 'با']
+        for (let i = 0; i < word_list.length; i++) {
+            
+            
+        }
+        return word_list
     }
 
     remove_postfix(word_list){
-
+        console.log(word_list)
+        this.Regex.raw_postfix.map((pattern)=>{
+            word_list.map((rows,i)=>{
+                if ( (word_list[i].length>4) & !(this.Verbs.all_verbs_roots.includes(word_list[i])) ) {
+                    let reg = new RegExp(pattern[0], 'g');
+                    word_list[i] = rows.replace(reg, pattern[1]);
+                }
+            })
+        })
+        return word_list
     }
 
     morakab_Unification(word_list){
-
+        this.Regex.raw_half_space.map((pattern)=>{
+            word_list.map((rows,i)=>{
+                let reg = new RegExp(pattern[0], 'g');
+                word_list[i] = rows.replace(reg, pattern[1]);
+            })
+        })
+        return word_list
     }
 
     set_normalizer(word_list){
@@ -102,7 +122,7 @@ module.exports = class Normalizer {
         word_list = this.verb_Steaming(word_list)
         word_list = this.remove_prefix(word_list)
         word_list = this.remove_postfix(word_list)
-        words_list = this.morakab_Unification(word_list)
+        word_list = this.morakab_Unification(word_list)
         return word_list
     }
 }

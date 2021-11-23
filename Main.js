@@ -17,8 +17,8 @@ class Main {
 
     xa(){
         // console.log(Marks.punctuation)
-        let tt = this.Tokenizer.set_tokenizer("بِز یُا")
-        return this.Normalizer.remove_arabic_notation(tt)
+        let tt = this.Tokenizer.set_tokenizer("ایسنا/اصفهان سرمربی تیم فوتسال فولادمبارکه سپاهان اعتقاد دارد تیمش در چند پست با کمبود بازیکن روبرو است که با رفع آن بهتر ظاهر خواهند شد. قواعد")
+        return this.Normalizer.set_normalizer(tt)
     }
 }
 
