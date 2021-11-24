@@ -67,19 +67,23 @@ module.exports = class Read {
                 let match
                 var re = RegExp(`${token}`, 'g')
                 let content_token = tokenizer.set_tokenizer(content)
-                let pos = []
+                let pos = {}
                 content_token = normalizer.set_content_normal(content_token)
+                let num = 0
                 while ((match = re.exec(content_token)) != null) {
                     let space = content.slice(0,match.index).match(new RegExp(` `, 'g'), '')
-                    pos.push(space ? space.length+1 : 1)
+                    //pos.push()
+                    pos[num++] = space ? space.length+1 : 1
                 }
-                if (pos.length != 0) {
+                if (Object.keys(pos).length != 0) {
                     positional_index[token][tokenid+1] = pos
-                    positional_index[token][tokenid+1]['sum'] = pos.length
+                    positional_index[token][tokenid+1]['sum'] = Object.keys(pos).length
                 }
-                sumtotal += pos.length
-                positional_index[token]['sum'] = sumtotal
+                console.log(token,Object.keys(pos).length);
+                sumtotal += Object.keys(pos).length
+                positional_index[token]['sumtotal'] = sumtotal
             })
+            console.log('=-=============');
         })
         return positional_index
     }
@@ -91,26 +95,26 @@ module.exports = class Read {
               return obj;
         },{});
         console.log(ordered);
-        this.create_file(ordered)
+        //this.create_file(ordered)
         return ordered
     }
 
     set_dictionary() {
-        const path = Path.join(__dirname, "Dictionary.txt")
-        if (fs.existsSync(path)) {
-            let dict = {}
-            fs.readFile(path, 'utf8' , (err, data) => {
-                if (err) {
-                  console.error(err)
-                  return
-                }
-                console.log(JSON.parse(data))
-                dict = JSON.parse(data)
-            })
-            this.sorted(this.create_dictionary())
-            return dict
-        }else{
+        // const path = Path.join(__dirname, "Dictionary.txt")
+        // if (fs.existsSync(path)) {
+        //     let dict = {}
+        //     fs.readFile(path, 'utf8' , (err, data) => {
+        //         if (err) {
+        //           console.error(err)
+        //           return
+        //         }
+        //         console.log(JSON.parse(data))
+        //         dict = JSON.parse(data)
+        //     })
+        //     this.sorted(this.create_dictionary())
+        //     return dict
+        // }else{
             return this.sorted(this.create_dictionary())
-        }
+        // }
     }
 }
