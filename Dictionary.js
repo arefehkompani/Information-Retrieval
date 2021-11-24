@@ -1,7 +1,8 @@
 const reader = require('xlsx')
 const Tokenizer = require('./Tokenizer')
 const Normalizer = require('./Normalizer')
-
+const fs = require('fs');
+const Path = require('path')
 
 module.exports = class Read {
     contents = []
@@ -34,6 +35,13 @@ module.exports = class Read {
                 this.docs_id[i] = i
             }
         })
+    }
+
+    create_file(text){
+        fs.writeFile('Dictionary.txt', `${text}`, 'utf8', function (err) {
+            if (err) return console.log(err);
+            console.log('created');
+          });
     }
 
     create_dictionary() {
@@ -83,10 +91,26 @@ module.exports = class Read {
               return obj;
         },{});
         console.log(ordered);
+        this.create_file(ordered)
         return ordered
     }
 
     set_dictionary() {
-        return this.sorted(this.create_dictionary())
+        const path = Path.join(__dirname, "Dictionary.txt")
+        if (fs.existsSync(path)) {
+            let dict = {}
+            fs.readFile(path, 'utf8' , (err, data) => {
+                if (err) {
+                  console.error(err)
+                  return
+                }
+                console.log(JSON.parse(data))
+                dict = JSON.parse(data)
+            })
+            this.sorted(this.create_dictionary())
+            return dict
+        }else{
+            return this.sorted(this.create_dictionary())
+        }
     }
 }
