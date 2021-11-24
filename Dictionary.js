@@ -27,10 +27,13 @@ module.exports = class Read {
 
         this.docs_num = data.length
         data.map((rows,i) => {
-            this.contents[i] = rows['content']
-            this.docs_url[i] = rows['url']
-            this.docs_title[i] = rows['title']
-            this.docs_id[i] = i
+            if (i<4) {
+                this.contents[i] = rows['content']
+                this.docs_url[i] = rows['url']
+                this.docs_title[i] = rows['title']
+                this.docs_id[i] = i
+                               
+            }
         })
     }
 
@@ -39,17 +42,30 @@ module.exports = class Read {
         let normalizer = new Normalizer
         let term_position_in_doc = 1
         let positional_index = {}
+        let doc_tokens_content = []
 
+        //let contents = ["سلام داشت مسلمی مجمد شده استاد خر1400", "من مدرسه پگاه بودم مدیر خری داشت"]
         this.contents.map((content,id) => {
-            let doc_tokens = tokenizer.set_tokenizer(content)
-            let doc_normal = normalizer.set_normalizer(doc_tokens)
-            doc_normal.map((token) => {
-                if (!positional_index.isOwnProperty(token)) {
-                    positional_index[token] = {}
-                }
+            //Get all tokens in the excel file
+            let doc_tok = tokenizer.set_tokenizer(content)
+            let normal = normalizer.set_normalizer(doc_tok)
+            Array.prototype.push.apply(doc_tokens_content,normal)
+        })
 
+        doc_tokens_content = [...new Set(doc_tokens_content)]
+        
+        doc_tokens_content.map((token,id) => {
+            //Check the tokens with the content to find the position
+            positional_index[token] = {}
+            this.contents.map((content,tokenid) => {
+                var re = `/${token}/g`
+                positional_index[token][tokenid] = [1,2]
+                while ((match = re.exec(content)) != null) {
+                    console.log("match found at " + match.index);
+                }
             })
         })
+        console.log(positional_index);
     }
 
     set_dictionary() {
