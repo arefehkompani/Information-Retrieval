@@ -96,7 +96,9 @@ module.exports = class Normalizer {
     remove_stopwords(word_list){
         for(let i=0 ; i<word_list.length ; i++){
             this.Marks.stopwords.map(mark => {
-                word_list[i] = word_list[i].replaceAll(mark,"")
+                if (mark == word_list[i]) {
+                    word_list[i] = word_list[i].replaceAll(mark,"")
+                }
             })
         }
         return word_list
@@ -127,6 +129,12 @@ module.exports = class Normalizer {
         word_list = this.remove_postfix(word_list)
         word_list = this.morakab_Unification(word_list)
         word_list = this.remove_nones(word_list)
+        return word_list
+    }
+
+    set_content_normal(word_list){
+        word_list = this.remove_mokassar(word_list)
+        word_list = this.char_digit_Unification(word_list)
         return word_list
     }
 }

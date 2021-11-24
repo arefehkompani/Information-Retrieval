@@ -11,6 +11,8 @@ module.exports = class Regex {
         ['[\u064B\u064C\u064D\u064E\u064F\u0650\u0651\u0652]', ''],
     ]
     
+    
+
     raw_prefix_notation = [
         ['پیش*' , '']
     ]

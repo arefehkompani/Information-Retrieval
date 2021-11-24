@@ -8,6 +8,12 @@
 }
 
 
-aa b c d     a
-e aa y u     a
+aa b c d     
+e aa y u     
 v g a w
+
+['aa':{
+    1: 1
+    2: 2
+},'b','c','d','e','aa']
+

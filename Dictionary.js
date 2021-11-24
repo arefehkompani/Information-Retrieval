@@ -44,8 +44,8 @@ module.exports = class Read {
         let positional_index = {}
         let doc_tokens_content = []
 
-        //let contents = ["سلام داشت مسلمی مجمد شده استاد خر1400", "من مدرسه پگاه بودم مدیر خری داشت"]
-        this.contents.map((content,id) => {
+        let contents = ["سلام داشتم مسلمی در مجمد شده استاد خر1400", "من مدرسه پگاه بودم مدیر خری داشت"]
+        contents.map((content,id) => {
             //Get all tokens in the excel file
             let doc_tok = tokenizer.set_tokenizer(content)
             let normal = normalizer.set_normalizer(doc_tok)
@@ -57,15 +57,20 @@ module.exports = class Read {
         doc_tokens_content.map((token,id) => {
             //Check the tokens with the content to find the position
             positional_index[token] = {}
-            this.contents.map((content,tokenid) => {
-                var re = `/${token}/g`
-                positional_index[token][tokenid] = [1,2]
+            contents.map((content,tokenid) => {
+                let match
+                var re = RegExp(`${token}`, 'g')
+                content = tokenizer.set_tokenizer(content)
+                content = normalizer.set_content_normal(content)
                 while ((match = re.exec(content)) != null) {
-                    console.log("match found at " + match.index);
+                    
+                    console.log(token,tokenid,match.index);
+                    positional_index[token][tokenid] = [match.index]
+                    //console.log("match found at " + match.index);
                 }
             })
         })
-        console.log(positional_index);
+        //console.log(positional_index);
     }
 
     set_dictionary() {
