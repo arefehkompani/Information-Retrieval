@@ -1,9 +1,6 @@
 const reader = require('xlsx')
 const Tokenizer = require('./Tokenizer')
 const Normalizer = require('./Normalizer')
-const fs = require('fs');
-const Path = require('path')
-
 module.exports = class Read {
     contents = []
     docs_id = []
@@ -11,12 +8,10 @@ module.exports = class Read {
     docs_url = []
     docs_num = 0
     inverted_index = {}
-
     constructor(){ 
         const file = reader.readFile('./data/IR1_7k_news.xlsx')
         const sheets = file.SheetNames
         let data = []
-
         for(let i = 0; i < sheets.length; i++)
         {
             const temp = reader.utils.sheet_to_json(
@@ -25,7 +20,6 @@ module.exports = class Read {
                 data.push(res)
             })
         }
-
         this.docs_num = data.length
         data.map((rows,i) => {
             if (i<4) {
@@ -36,14 +30,6 @@ module.exports = class Read {
             }
         })
     }
-
-    create_file(text){
-        fs.writeFile('Dictionary.txt', `${text}`, 'utf8', function (err) {
-            if (err) return console.log(err);
-            console.log('created');
-          });
-    }
-
     create_dictionary() {
         let tokenizer = new Tokenizer
         let normalizer = new Normalizer
@@ -56,7 +42,6 @@ module.exports = class Read {
             let normal = normalizer.set_normalizer(doc_tok)
             Array.prototype.push.apply(doc_tokens_content,normal)
         })
-
         doc_tokens_content = [...new Set(doc_tokens_content)]
         
         doc_tokens_content.map((token,id) => {
@@ -67,27 +52,22 @@ module.exports = class Read {
                 let match
                 var re = RegExp(`${token}`, 'g')
                 let content_token = tokenizer.set_tokenizer(content)
-                let pos = {}
+                let pos = []
                 content_token = normalizer.set_content_normal(content_token)
-                let num = 0
                 while ((match = re.exec(content_token)) != null) {
                     let space = content.slice(0,match.index).match(new RegExp(` `, 'g'), '')
-                    //pos.push()
-                    pos[num++] = space ? space.length+1 : 1
+                    pos.push(space ? space.length+1 : 1)
                 }
-                if (Object.keys(pos).length != 0) {
+                if (pos.length != 0) {
                     positional_index[token][tokenid+1] = pos
-                    positional_index[token][tokenid+1]['sum'] = Object.keys(pos).length
+                    positional_index[token][tokenid+1]['sum'] = pos.length
                 }
-                console.log(token,Object.keys(pos).length);
-                sumtotal += Object.keys(pos).length
-                positional_index[token]['sumtotal'] = sumtotal
+                sumtotal += pos.length
+                positional_index[token]['sum'] = sumtotal
             })
-            console.log('=-=============');
         })
         return positional_index
     }
-
     sorted(unordered){
         const ordered = Object.keys(unordered).sort().reduce(
             (obj, key) => { 
@@ -95,26 +75,9 @@ module.exports = class Read {
               return obj;
         },{});
         console.log(ordered);
-        //this.create_file(ordered)
         return ordered
     }
-
     set_dictionary() {
-        // const path = Path.join(__dirname, "Dictionary.txt")
-        // if (fs.existsSync(path)) {
-        //     let dict = {}
-        //     fs.readFile(path, 'utf8' , (err, data) => {
-        //         if (err) {
-        //           console.error(err)
-        //           return
-        //         }
-        //         console.log(JSON.parse(data))
-        //         dict = JSON.parse(data)
-        //     })
-        //     this.sorted(this.create_dictionary())
-        //     return dict
-        // }else{
-            return this.sorted(this.create_dictionary())
-        // }
+        return this.sorted(this.create_dictionary())
     }
 }
