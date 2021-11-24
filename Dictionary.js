@@ -41,7 +41,7 @@ module.exports = class Read {
         let normalizer = new Normalizer
         let positional_index = {}
         let doc_tokens_content = []
-        let contents = ["سلام دانشگاه امیرکبیر خوبی سلام چطوری عارفه خوبه 1400آبان ما رفتیم","آبان 99 گفته شد دانشگاه امیرکبیر که کرونا داشتم"]
+        let contents = ["سلام دانشگاه خوبی سلام چطوری دانشگاه علموص عارفه خوبه 1400آبان ما رفتیم","آبان 99 گفته شد دانشگاه امیرکبیر که کرونا داشتم"]
         contents.map((content,id) => {
             //Get all tokens in the excel file
             let doc_tok = tokenizer.set_tokenizer(content)

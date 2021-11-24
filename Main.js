@@ -1,3 +1,5 @@
+const readline = require("readline");
+
 const Marks = require('./Marks')
 const Regex = require('./Regex')
 const Verbs = require('./Verbs')
@@ -16,11 +18,24 @@ class Main {
         this.Normalizer = new Normalizer
         this.Query = new Query
     }
-
-    xa(){
-        return this.Query.kind_query("آبان")
+    
+    start(){
+        // const rl = readline.createInterface({
+        //     input: process.stdin,
+        //     output: process.stdout
+        // });
+        
+        this.Query.kind_query("دانشگاه امیرکبیر")
+        // rl.question("Enter your query: ", (query) => {
+        //     //this.Query.kind_query(query)
+        //     rl.close();
+        // });
+        
+        // rl.on("close", function() {
+        //     process.exit(0);
+        // });
     }
 }
 
 const main = new Main()
-console.log(main.xa())
+main.start()
