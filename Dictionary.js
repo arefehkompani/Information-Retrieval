@@ -32,7 +32,6 @@ module.exports = class Read {
                 this.docs_url[i] = rows['url']
                 this.docs_title[i] = rows['title']
                 this.docs_id[i] = i
-                               
             }
         })
     }
@@ -40,12 +39,10 @@ module.exports = class Read {
     create_dictionary() {
         let tokenizer = new Tokenizer
         let normalizer = new Normalizer
-        let term_position_in_doc = 1
         let positional_index = {}
         let doc_tokens_content = []
 
-        let contents = ["سلام داشتم مسلمی سلام در مجمد شده سلام استاد خر1400", "من مدرسه پگاه بودم مدیر پگاه خری داشت"]
-        contents.map((content,id) => {
+        this.contents.map((content,id) => {
             //Get all tokens in the excel file
             let doc_tok = tokenizer.set_tokenizer(content)
             let normal = normalizer.set_normalizer(doc_tok)
@@ -57,12 +54,13 @@ module.exports = class Read {
         doc_tokens_content.map((token,id) => {
             //Check the tokens with the content to find the position
             positional_index[token] = {}
+            let sumtotal = 0
             contents.map((content,tokenid) => {
                 let match
                 var re = RegExp(`${token}`, 'g')
                 let content_token = tokenizer.set_tokenizer(content)
-                content_token = normalizer.set_content_normal(content_token)
                 let pos = []
+                content_token = normalizer.set_content_normal(content_token)
                 while ((match = re.exec(content_token)) != null) {
                     let space = content.slice(0,match.index).match(new RegExp(` `, 'g'), '')
                     pos.push(space ? space.length+1 : 1)
@@ -71,13 +69,11 @@ module.exports = class Read {
                     positional_index[token][tokenid+1] = pos
                     positional_index[token][tokenid+1]['sum'] = pos.length
                 }
-                // Object.keys(positional_index[token][tokenid+1]).map(rows => {
-                //     console.log(rows);
-                // })
-                
+                sumtotal += pos.length
+                positional_index[token]['sum'] = sumtotal
             })
         })
-        console.log(positional_index);
+        return positional_index
     }
 
     set_dictionary() {
