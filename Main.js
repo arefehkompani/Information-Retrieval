@@ -4,6 +4,7 @@ const Verbs = require('./Verbs')
 const Dictionary = require('./Dictionary')
 const Tokenizer = require('./Tokenizer')
 const Normalizer = require('./Normalizer')
+const Query = require('./Query')
 
 class Main {
     constructor(){
@@ -13,11 +14,11 @@ class Main {
         this.Dictionary = new Dictionary
         this.Tokenizer = new Tokenizer
         this.Normalizer = new Normalizer
+        this.Query = new Query
     }
 
     xa(){
-        // console.log(Marks.punctuation)
-        return this.Dictionary.set_dictionary()
+        return this.Query.kind_query("آبان")
     }
 }
 

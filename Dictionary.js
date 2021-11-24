@@ -41,8 +41,8 @@ module.exports = class Read {
         let normalizer = new Normalizer
         let positional_index = {}
         let doc_tokens_content = []
-
-        this.contents.map((content,id) => {
+        let contents = ["سلام دانشگاه امیرکبیر خوبی سلام چطوری عارفه خوبه 1400آبان ما رفتیم","آبان 99 گفته شد دانشگاه امیرکبیر که کرونا داشتم"]
+        contents.map((content,id) => {
             //Get all tokens in the excel file
             let doc_tok = tokenizer.set_tokenizer(content)
             let normal = normalizer.set_normalizer(doc_tok)
@@ -76,7 +76,17 @@ module.exports = class Read {
         return positional_index
     }
 
+    sorted(unordered){
+        const ordered = Object.keys(unordered).sort().reduce(
+            (obj, key) => { 
+              obj[key] = unordered[key]; 
+              return obj;
+        },{});
+        console.log(ordered);
+        return ordered
+    }
+
     set_dictionary() {
-        this.create_dictionary()
+        return this.sorted(this.create_dictionary())
     }
 }
