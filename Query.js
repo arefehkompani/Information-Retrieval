@@ -38,12 +38,22 @@ module.exports = class Query {
             })
         })
         console.log(postings);
-        
+        let reserve = {}
         postings.map((word,key) => {
-            for (let i = 0; i < Object.keys(postings[key]).length-1; i++) {
-                console.log(Object.keys(postings[key])[i])
+            for ( let i = 0; i < Object.keys(postings[key]).length-1; i++) {
+                let posting_key = Object.keys(postings[key])[i]
+                // console.log(Object.keys(postings[key])[i])
+                console.log(posting_key);
+                reserve[posting_key] = {}
+                reserve[posting_key][posting_key] = Object.values(postings[key])[i]
+                // if(reserve.includes(Object.keys(postings[key])[i])) {
+                //     console.log(Object.keys(postings[key])[i],Object.values(postings[key])[i]);
+                // }else{
+                //     reserve[posting_key] = Object.keys(postings[key])[i]
+                // }
             }
         })
+        console.log(reserve);
         // console.log(postings);
     }
 

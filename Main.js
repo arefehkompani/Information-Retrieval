@@ -25,7 +25,7 @@ class Main {
         //     output: process.stdout
         // });
         
-        this.Query.kind_query("آبان")
+        this.Query.kind_query("دانشگاه صنعتی امیرکبیر")
         // rl.question("Enter your query: ", (query) => {
         //     //this.Query.kind_query(query)
         //     rl.close();
