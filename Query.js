@@ -66,17 +66,17 @@ module.exports = class Query {
                 }
             })
         })
-
+        let title2 = []
         Object.keys(positions).map(docid => {
             positions[docid].sort()
-            console.log(positions[docid]);
+            // console.log(positions[docid]);
             let flag = true
             if (positions[docid].length == 1) {
                 flag = false
             }
             for (let i = positions[docid].length-1 ; i >=1 ; i--) {
                 if(positions[docid][i] - positions[docid][i-1] != 1){
-                    console.log(positions[docid][i],positions[docid][i-1]);
+                    // console.log(positions[docid][i],positions[docid][i-1]);
                     flag = false
                 }  
             }
@@ -85,9 +85,13 @@ module.exports = class Query {
                 console.log(this.Dictionary.docs_title[docid-1])
             }else{
                 //Olaviat Kam
-                console.log(this.Dictionary.docs_title[docid-1])
+                title2.push(docid)
 
             }
+        })
+
+        title2.map(docid => {
+            console.log(this.Dictionary.docs_title[docid-1])
         })
         //console.log(positions);
     }

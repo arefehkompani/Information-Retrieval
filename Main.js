@@ -20,20 +20,20 @@ class Main {
     }
     
     start(){
-        // const rl = readline.createInterface({
-        //     input: process.stdin,
-        //     output: process.stdout
-        // });
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
         
-        this.Query.kind_query("دانشگاه صنعتی امیرکبیر")
-        // rl.question("Enter your query: ", (query) => {
-        //     //this.Query.kind_query(query)
-        //     rl.close();
-        // });
+        // this.Query.kind_query("دانشگاه صنعتی امیرکبیر")
+        rl.question("Enter your query: ", (query) => {
+            this.Query.kind_query(query)
+            rl.close();
+        });
         
-        // rl.on("close", function() {
-        //     process.exit(0);
-        // });
+        rl.on("close", function() {
+            process.exit(0);
+        });
     }
 }
 
