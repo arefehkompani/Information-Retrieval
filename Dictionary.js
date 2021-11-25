@@ -35,18 +35,22 @@ module.exports = class Read {
         let normalizer = new Normalizer
         let positional_index = {}
         let doc_tokens_content = []
-        let contents = ["سلام دانشگاه خوبی سلام چطوری دانشگاه علموص صنعتی عارفه خوبه 1400آبان ما رفتیم","آبان 99 گفته شد دانشگاه صنعتی امیرکبیر که کرونا داشتم"," صنعتی"]
+        let contents = ["سلام دانشگاه امیرکبیر خوبی سلام چطوری دانشگاه علموص صنعتی عارفه خوبه 1400آبان ما رفتیم","آبان 99 گفته شد دانشگاه صنعتی امیرکبیر که کرونا داشتم"," صنعتی"]
         contents.map((content,id) => {
             //Get all tokens in the excel file
             let doc_tok = tokenizer.set_tokenizer(content)
             let normal = normalizer.set_normalizer(doc_tok)
             Array.prototype.push.apply(doc_tokens_content,normal)
+            console.clear()
+            console.log("create token of content: " + id);
         })
         doc_tokens_content = [...new Set(doc_tokens_content)]
-        
+        let alltokenlength = doc_tokens_content.length*50
+        console.log(alltokenlength);
         doc_tokens_content.map((token,id) => {
             //Check the tokens with the content to find the position
             positional_index[token] = {}
+            
             let sumtotal = 0
             contents.map((content,tokenid) => {
                 let match
@@ -64,8 +68,13 @@ module.exports = class Read {
                 }
                 sumtotal += pos.length
                 positional_index[token]['sum'] = sumtotal
+                console.clear()
+                console.log("in process: "+ alltokenlength--)
             })
+            console.log(positional_index);
         })
+        console.log(positional_index);
+
         return positional_index
     }
     sorted(unordered){

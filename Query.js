@@ -65,9 +65,31 @@ module.exports = class Query {
                     positions[docid] = positions[docid].concat(total)
                 }
             })
-            
         })
-        console.log(positions);
+
+        Object.keys(positions).map(docid => {
+            positions[docid].sort()
+            console.log(positions[docid]);
+            let flag = true
+            if (positions[docid].length == 1) {
+                flag = false
+            }
+            for (let i = positions[docid].length-1 ; i >=1 ; i--) {
+                if(positions[docid][i] - positions[docid][i-1] != 1){
+                    console.log(positions[docid][i],positions[docid][i-1]);
+                    flag = false
+                }  
+            }
+            if(flag){
+                //Olaviat bala
+                console.log(this.Dictionary.docs_title[docid-1])
+            }else{
+                //Olaviat Kam
+                console.log(this.Dictionary.docs_title[docid-1])
+
+            }
+        })
+        //console.log(positions);
     }
 
     kind_query(query){
