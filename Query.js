@@ -38,23 +38,36 @@ module.exports = class Query {
             })
         })
         console.log(postings);
-        let reserve = {}
+        let reserve = []
+        let r = 0
         postings.map((word,key) => {
             for ( let i = 0; i < Object.keys(postings[key]).length-1; i++) {
                 let posting_key = Object.keys(postings[key])[i]
-                // console.log(Object.keys(postings[key])[i])
-                console.log(posting_key);
-                reserve[posting_key] = {}
-                reserve[posting_key][posting_key] = Object.values(postings[key])[i]
-                // if(reserve.includes(Object.keys(postings[key])[i])) {
-                //     console.log(Object.keys(postings[key])[i],Object.values(postings[key])[i]);
-                // }else{
-                //     reserve[posting_key] = Object.keys(postings[key])[i]
-                // }
+                if(!reserve.includes(posting_key)) {
+                    reserve[r] = posting_key
+                    r++
+                }
             }
         })
-        console.log(reserve);
-        // console.log(postings);
+        this.check_position(postings,reserve)
+    }
+
+    check_position(postings, reserve){
+        let positions = {}
+        reserve.map(docid => {
+            let total = []
+            postings.map((word,key) => {
+                if (Object.keys(word).includes(docid)) {
+                    let pos = Object.values(word[docid])
+                    pos.pop()
+                    total = total.concat(pos)
+                    positions[docid] = []
+                    positions[docid] = positions[docid].concat(total)
+                }
+            })
+            
+        })
+        console.log(positions);
     }
 
     kind_query(query){
