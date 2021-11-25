@@ -1,6 +1,9 @@
 const reader = require('xlsx')
 const Tokenizer = require('./Tokenizer')
 const Normalizer = require('./Normalizer')
+const fs = require('fs');
+const Path = require('path')
+
 module.exports = class Read {
     contents = []
     docs_id = []
@@ -22,7 +25,7 @@ module.exports = class Read {
         }
         this.docs_num = data.length
         data.map((rows,i) => {
-            if (i<4) {
+            if (i<1) {
                 this.contents[i] = rows['content']
                 this.docs_url[i] = rows['url']
                 this.docs_title[i] = rows['title']
@@ -30,13 +33,21 @@ module.exports = class Read {
             }
         })
     }
+
+    create_file(text){
+        fs.writeFile('Dictionary.json', JSON.stringify(text), 'utf8', function (err) {
+            if (err) return console.log(err);
+            console.log('created');
+          });
+    }
+
     create_dictionary() {
         let tokenizer = new Tokenizer
         let normalizer = new Normalizer
         let positional_index = {}
         let doc_tokens_content = []
-        let contents = ["سلام دانشگاه امیرکبیر خوبی سلام چطوری دانشگاه علموص صنعتی عارفه خوبه 1400آبان ما رفتیم","آبان 99 گفته شد دانشگاه صنعتی امیرکبیر که کرونا داشتم"," صنعتی"]
-        contents.map((content,id) => {
+        //let contents = ["سلام دانشگاه امیرکبیر خوبی سلام چطوری دانشگاه علموص صنعتی عارفه خوبه 1400آبان ما رفتیم","آبان 99 گفته شد دانشگاه صنعتی امیرکبیر که کرونا داشتم"," صنعتی"]
+        this.contents.map((content,id) => {
             //Get all tokens in the excel file
             let doc_tok = tokenizer.set_tokenizer(content)
             let normal = normalizer.set_normalizer(doc_tok)
@@ -52,7 +63,7 @@ module.exports = class Read {
             positional_index[token] = {}
             
             let sumtotal = 0
-            contents.map((content,tokenid) => {
+            this.contents.map((content,tokenid) => {
                 let match
                 var re = RegExp(`${token}`, 'g')
                 let content_token = tokenizer.set_tokenizer(content)
@@ -71,9 +82,8 @@ module.exports = class Read {
                 console.clear()
                 console.log("in process: "+ alltokenlength--)
             })
-            console.log(positional_index);
+            //console.log(positional_index);
         })
-        console.log(positional_index);
 
         return positional_index
     }
@@ -87,6 +97,8 @@ module.exports = class Read {
         return ordered
     }
     set_dictionary() {
-        return this.create_dictionary()
+        let dict = this.create_dictionary()
+        this.create_file(dict)
+        return dict
     }
 }
