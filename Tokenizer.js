@@ -11,8 +11,6 @@ module.exports = class Tokenizer {
             text = text.replaceAll(i, "")
         })
         let word_list = this.split(text.trim().replaceAll("\n", " "), this.Marks.sep_list)
-        //NID _ ir hyperlink and link
-        // set()
         return word_list
     }
 

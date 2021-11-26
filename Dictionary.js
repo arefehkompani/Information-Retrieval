@@ -25,7 +25,7 @@ module.exports = class Read {
         }
         this.docs_num = data.length
         data.map((rows,i) => {
-            if (i<1) {
+            if (i<500) {
                 this.contents[i] = rows['content']
                 this.docs_url[i] = rows['url']
                 this.docs_title[i] = rows['title']
@@ -37,7 +37,7 @@ module.exports = class Read {
     create_file(text){
         fs.writeFile('Dictionary.json', JSON.stringify(text), 'utf8', function (err) {
             if (err) return console.log(err);
-            console.log('created');
+            //console.log('created');
           });
     }
 
@@ -46,17 +46,23 @@ module.exports = class Read {
         let normalizer = new Normalizer
         let positional_index = {}
         let doc_tokens_content = []
+        let numtoken = 0
         //let contents = ["سلام دانشگاه امیرکبیر خوبی سلام چطوری دانشگاه علموص صنعتی عارفه خوبه 1400آبان ما رفتیم","آبان 99 گفته شد دانشگاه صنعتی امیرکبیر که کرونا داشتم"," صنعتی"]
         this.contents.map((content,id) => {
             //Get all tokens in the excel file
             let doc_tok = tokenizer.set_tokenizer(content)
             let normal = normalizer.set_normalizer(doc_tok)
+            numtoken += doc_tok.length
+            //Array.prototype.push.apply(doc_tok_total,doc_tok)
             Array.prototype.push.apply(doc_tokens_content,normal)
             console.clear()
             console.log("create token of content: " + id);
         })
+        
+        console.log("Token total length: "+numtoken);
+        console.log("Normal total length: "+doc_tokens_content.length);
         doc_tokens_content = [...new Set(doc_tokens_content)]
-        let alltokenlength = doc_tokens_content.length*50
+        let alltokenlength = doc_tokens_content.length*500
         console.log(alltokenlength);
         doc_tokens_content.map((token,id) => {
             //Check the tokens with the content to find the position
@@ -64,27 +70,30 @@ module.exports = class Read {
             
             let sumtotal = 0
             this.contents.map((content,tokenid) => {
-                let match
-                var re = RegExp(`${token}`, 'g')
-                let content_token = tokenizer.set_tokenizer(content)
-                let pos = []
-                content_token = normalizer.set_content_normal(content_token)
-                while ((match = re.exec(content_token)) != null) {
-                    let space = content.slice(0,match.index).match(new RegExp(` `, 'g'), '')
-                    pos.push(space ? space.length+1 : 1)
+                if (tokenid<500) {
+                    let match
+                    var re = RegExp(`${token}`, 'g')
+                    let content_token = tokenizer.set_tokenizer(content)
+                    let pos = []
+                    content_token = normalizer.set_content_normal(content_token)
+                    while ((match = re.exec(content_token)) != null) {
+                        let space = content.slice(0,match.index).match(new RegExp(` `, 'g'), '')
+                        pos.push(space ? space.length+1 : 1)
+                    }
+                    if (pos.length != 0) {
+                        positional_index[token][tokenid+1] = pos
+                        positional_index[token][tokenid+1]['sum'] = pos.length
+                    }
+                    sumtotal += pos.length
+                    positional_index[token]['sum'] = sumtotal
+                    //console.clear()
+                    //console.log("in process: "+ alltokenlength--)
                 }
-                if (pos.length != 0) {
-                    positional_index[token][tokenid+1] = pos
-                    positional_index[token][tokenid+1]['sum'] = pos.length
-                }
-                sumtotal += pos.length
-                positional_index[token]['sum'] = sumtotal
-                console.clear()
-                console.log("in process: "+ alltokenlength--)
             })
             //console.log(positional_index);
         })
-
+         
+        normalizer.get_heaplaw()
         return positional_index
     }
     sorted(unordered){
@@ -93,7 +102,7 @@ module.exports = class Read {
               obj[key] = unordered[key]; 
               return obj;
         },{});
-        console.log(ordered);
+        //console.log(ordered);
         return ordered
     }
     set_dictionary() {

@@ -8,6 +8,9 @@ module.exports = class Normalizer {
         this.Marks = new Marks
         this.Verbs = new Verbs
         this.Regex = new Regex
+
+        let before = 0
+        let after = 0
     }
 
     remove_punctuation_marks(word_list){
@@ -118,6 +121,8 @@ module.exports = class Normalizer {
         return word_list.filter((a) => a)
     }
 
+    
+
     set_normalizer(word_list){
         word_list = this.remove_stopwords(word_list)
         word_list = this.remove_punctuation_marks(word_list)
@@ -125,11 +130,18 @@ module.exports = class Normalizer {
         word_list = this.remove_mokassar(word_list)
         word_list = this.remove_arabic_notation(word_list)
         word_list = this.char_digit_Unification(word_list)
+        this.before = word_list.length
         word_list = this.verb_Steaming(word_list)
         word_list = this.remove_postfix(word_list)
         word_list = this.morakab_Unification(word_list)
         word_list = this.remove_nones(word_list)
+        this.after = word_list.length
         return word_list
+    }
+
+    get_heaplaw(){
+        console.log("Before verb_steaming: "+ this.before);
+        console.log("After verb_steaming: "+ this.after);
     }
 
     set_content_normal(word_list){

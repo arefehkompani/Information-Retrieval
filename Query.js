@@ -14,7 +14,7 @@ module.exports = class Query {
     one_word_query(query) {
         let query_normal = []
         query_normal = this.Normalizer.set_normalizer([query])
-        console.log(query_normal);
+        //onsole.log(query_normal);
         Object.keys(this.dictionary).map((rows,key) => {
             if (rows == query_normal) {
                 for (let i = 0; i < Object.keys(this.dictionary[rows]).length-1; i++) {
@@ -29,7 +29,7 @@ module.exports = class Query {
         let query_token = []
         query_token = this.Tokenizer.set_tokenizer(query)
         query_normal = this.Normalizer.set_normalizer(query_token)
-        console.log(query_normal);
+        //console.log(query_normal);
         let postings = []
         Object.keys(this.dictionary).map((rows,key) => {
             query_normal.map(token => {
@@ -38,7 +38,7 @@ module.exports = class Query {
                 }
             })
         })
-        console.log(postings);
+        //console.log(postings);
         let reserve = []
         let r = 0
         postings.map((word,key) => {
