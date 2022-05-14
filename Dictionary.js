@@ -86,8 +86,8 @@ module.exports = class Read {
                     }
                     sumtotal += pos.length
                     positional_index[token]['sum'] = sumtotal
-                    //console.clear()
-                    //console.log("in process: "+ alltokenlength--)
+                    console.clear()
+                    console.log("in process: "+ alltokenlength--)
                 }
             })
             //console.log(positional_index);
